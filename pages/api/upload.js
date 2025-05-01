@@ -12,6 +12,7 @@ export default async function handle(req,res){
     })
         console.log('length', files.file.length)
         res.json('ok')
+        //Ended at time: 2:21:59
 }
 
 export const config = {
