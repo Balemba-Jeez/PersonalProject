@@ -33,7 +33,12 @@ export default function ProductForm({_id, title:existingTitle, description:exist
         router.push('/products');
     }
     function uploadImages(ev){
-        console.log(ev)
+        const files = ev.target?.files;
+        if (files?.length > 0){
+            const data = new FormData();
+            files.forEach(file => data.append('file', file));
+    //Ended here at time: 2:07:45        
+        }
     }
     return(
     
