@@ -32,12 +32,19 @@ export default function ProductForm({_id, title:existingTitle, description:exist
     if (goToProducts) {
         router.push('/products');
     }
-    function uploadImages(ev){
+    async function uploadImages(ev){
         const files = ev.target?.files;
         if (files?.length > 0){
             const data = new FormData();
-            files.forEach(file => data.append('file', file));
-    //Ended here at time: 2:07:45        
+            for (const file of files){
+                data.append('file', file)
+            }
+ 
+            const  res = await fetch('/api/upload', {
+                method: 'POST',
+                body: data,
+            })
+            console.log(res);
         }
     }
     return(
