@@ -8,4 +8,7 @@ const ProductSchema = new Schema({
     images: [{type:String}],
 });
 
+
+
+
 export const Product = models.Product || model('Product', ProductSchema);

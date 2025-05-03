@@ -12,8 +12,13 @@ textarea {
     @apply mb-2;
 }
 
-input:focus text:focus {
+/* input:focus,
+text:focus {
     @apply border-blue-900;
+} */
+input:focus,
+input[type="text"]:focus {
+    @apply border border-blue-900;
 }
 
 h1 {
