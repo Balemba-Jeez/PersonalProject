@@ -7,7 +7,8 @@ img {
 }
 
 input,
-textarea {
+textarea,
+select {
     @apply border-2 border-gray-300 rounded-md px-1 w-full;
     @apply mb-2;
 }
@@ -17,7 +18,8 @@ text:focus {
     @apply border-blue-900;
 } */
 input:focus,
-input[type="text"]:focus {
+textarea:focus,
+select:focus {
     @apply border border-blue-900;
 }
 
