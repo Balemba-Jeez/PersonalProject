@@ -63,3 +63,20 @@ table.basic a {
 .btn-default {
     @apply bg-gray-500 text-white;
 }
+
+.my-confirm-button {
+    background-color: #d55 !important;
+    color: white !important;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.my-cancel-button {
+    background-color: #ccc !important;
+    color: black !important;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
