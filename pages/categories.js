@@ -24,7 +24,14 @@ function Categories({swal}) {
     async function saveCategory(ev){
          ev.preventDefault();
          
-         const data = {name,parentCategory}
+         const data = {
+            name,
+            parentCategory,
+            properties:properties.map(p => ({
+                name:p.name,
+                values:p.values.split(',')
+            }))
+        };
          if(editedCategory){
             data._id = editedCategory._id
             await axios.put('/api/categories', data);
@@ -34,13 +41,20 @@ function Categories({swal}) {
          }
         
         setName('');
+        setParentCategory('');
+        setProperties([])
         fetchCategories();
     }
     function editCategory(category){
         setEditedCategory(category);
         setName(category.name);
-        setParentCategory(category.parent?._id)
-        
+        setParentCategory(category.parent?._id);
+        setProperties(
+            category.properties.map(({name,values}) => ({
+                name,
+                values: values.join(','),
+            })));
+
     }
     function deleteCategory(category){
         swal.fire({
@@ -142,7 +156,7 @@ function Categories({swal}) {
                                     placeholder="property name (example: color)" />
                                 <input type="text" 
                                     className="mb-0"
-                                    value={property.value} 
+                                    value={property.values} 
                                     onChange={(ev) => handlePropertyValuesChange(
                                                         index, 
                                                         property, 
@@ -159,28 +173,41 @@ function Categories({swal}) {
                     }
                 </div>
 
-                
-                    {editedCategory && (
-                        <button
 
-                            className="btn-default">Cancel
+            <div className="flex gap-1">
+                {editedCategory && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                
+                                setEditedCategory(null);
+                                setName('');
+                                setParentCategory('');
+                                setProperties([]);
+                            }}
+                            className="btn-default"> 
+                            Cancel
                         </button>
-                    )} 
-                    {/* //Ended 4:37:54 */}
-                
+
+
+                    )}
+
                 <button 
                     type="submit" 
                     className="btn-primary py-1">
-                            Save
-                </button> 
+                        Save
+                </button>
+            </div>
+
+
             </form>
-            {editedCategory && (
+            {!editedCategory && (
             <table className="basic mt-4">
                 <thead>
                     <tr>
                         <td>Category name</td>
                         <td>Parent category </td>
-
+                        <td></td>
                     </tr>
                 </thead>
                 <tbody>
