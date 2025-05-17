@@ -208,6 +208,7 @@ function Categories({swal}) {
                         <td>Category name</td>
                         <td>Parent category </td>
                         <td></td>
+                        {/* Ended at 5:17:24 */}
                     </tr>
                 </thead>
                 <tbody>
