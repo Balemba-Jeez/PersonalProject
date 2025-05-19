@@ -22,7 +22,8 @@ export default function Nav(){
             </svg>
 
             <span className="">
-                EcommerceAdmin
+        {/**Ended at 5:48:42 */}
+                EcommerceAdmin 
             </span>
         </Link>
         <nav className="flex-col gap-x-2">
