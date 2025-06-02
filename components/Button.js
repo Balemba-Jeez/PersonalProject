@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 
 
-const ButtonStyle = css`
+export const ButtonStyle = css`
         
     border: 0;
     padding: 5px 15px;
@@ -11,6 +11,7 @@ const ButtonStyle = css`
     cursor: pointer;
     display: inline-flex;
     align-items: center;
+    text-decoration: none;
     svg{
         height: 16px;
         margin-right: 5px;
@@ -38,7 +39,7 @@ const ButtonStyle = css`
     `}
 
 `;
-{/**stop at 7:29:57 */}
+
 
  const StyledButton = styled.button`
     ${ButtonStyle}
