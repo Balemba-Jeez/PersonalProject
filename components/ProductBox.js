@@ -4,9 +4,8 @@ import CartIcon from "./icons/CartIcon";
 import Link from "next/link";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
+import { formatPrice } from "@/utils/priceUtils";
 
-const formatPrice = (val, suffix) =>
-    parseFloat(val.toFixed(1)).toString().replace(/\.0$/, "") + suffix;
 const ProductWrapper = styled.div`
 
 `;
@@ -38,14 +37,24 @@ const ProductInfoBox = styled.div`
 `;
 
 const PriceRow = styled.div`
-    display: flex;
+    display: block;
+    @media screen and (min-width: 768px) {
+        display: flex;
+        gap: 5px;
+    }
     align-items: center;
     justify-content: space-between;
     margin-top:2px;
 `
 const Price = styled.div`
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: right;
+    @media screen and (min-width: 768px) {
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: left;
+    }
 `;
 
 export default function ProductBox({_id, title, description,price, images}){
@@ -55,14 +64,14 @@ export default function ProductBox({_id, title, description,price, images}){
         <ProductWrapper>
             <WhiteBox href={url}>
                 <div>
-                    <img src={images[0]} alt=""/>
+                    <img src={images?.[0]} alt=""/>
                 </div>
             </WhiteBox>
             <ProductInfoBox>
                 <Title href={url}>{title}</Title>
                 <PriceRow>
                     <Price>
-                        {/* xaf{price} */}
+                        {/* XAF{price} */}
                         XAF{""}
                         { 
                             (price >= 1e9 && formatPrice(price / 1e9, "B")) || 
@@ -71,7 +80,7 @@ export default function ProductBox({_id, title, description,price, images}){
                             price.toString()
                         }
                     </Price>
-                    <Button onClick={() => addProduct(_id)} primary outline>Add to cart</Button>
+                    <Button block onClick={() => addProduct(_id)} primary outline>Add to cart</Button>
                 </PriceRow>
             </ProductInfoBox>
 
