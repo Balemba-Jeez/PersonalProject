@@ -1,20 +1,27 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
-import { _id } from "@next-auth/mongodb-adapter";
-import { isAdminRequest } from "./auth/[...nextauth]";
+// import { _id } from "@next-auth/mongodb-adapter";
+// import { isAdminRequest } from "./auth/[...nextauth]";
 
 export default async function handle(req, res) {
     const {method} = req;
+    const { latest } = req.query;
     await mongooseConnect();
-    await isAdminRequest(req,res);
+    // await isAdminRequest(req,res);
     
     
     if(method === 'GET'){
         if (req.query?.id){
-            res.json(await Product.findOne({_id:req.query.id}));
+            return res.json(await Product.findOne({_id:req.query.id}));
+            
+        } else if (latest === 'true') {
+            const latestProducts = await Product.find()
+              .sort({ createdAt: -1 }) // newest first
+              .limit(5);
+            return res.status(200).json(latestProducts);
 
-        } else {
-            res.json(await Product.find());
+          } else {
+            return res.json(await Product.find());
         }
     }
     if (method === 'POST') {

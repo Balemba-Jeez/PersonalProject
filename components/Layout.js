@@ -1,20 +1,20 @@
 import Nav from "@/components/Nav"
-import { useSession, signIn, signOut } from "next-auth/react"
+// import { useSession, signIn, signOut } from "next-auth/react"
 import { useState } from "react";
 import Logo from "@/components/Logo"
 
 export default function Layout({children}) {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const [showNav, setShowNav] = useState(false);
-  if (!session) {
-      return (
-    <div className="bg-bgGray w-screen h-screen flex items-center">
-      <div className='text-center w-full'>
-        <button onClick={() => signIn('google')} className='bg-white p-2 px-4 cursor-pointer rounded-lg'>Login with Google</button>
-      </div>
-    </div>
-  )
-  }
+  // if (!session) {
+  //     return (
+  //   <div className="bg-bgGray w-screen h-screen flex items-center">
+  //     <div className='text-center w-full'>
+  //       <button onClick={() => signIn('google')} className='bg-white p-2 px-4 cursor-pointer rounded-lg'>Login with Google</button>
+  //     </div>
+  //   </div>
+  // )
+  // }
   return (
     
     <div className="bg-gray-200 min-h-screen">
