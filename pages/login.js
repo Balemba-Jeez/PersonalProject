@@ -212,6 +212,7 @@ a:hover{
     .wrapper{
         margin: 20px;
     }
+
 }
 
 `;
@@ -245,15 +246,15 @@ export default function Login() {
         <>
         <PageGlobalStyle />
         <StyledDiv>
-        <div class="wrapper">
-        <div class="form-header">
-            <div class="titles">
-                <div class="title-login">Welcome back</div>
+        <div className="wrapper">
+        <div className="form-header">
+            <div className="titles">
+                <div className="title-login">Welcome back</div>
                 
             </div>
         </div>
         {/* <!-- LOGIN FORM --> */}
-        <form onSubmit={handleLogin} action="" class="login-form" autocomplete="off">
+        <form onSubmit={handleLogin} action="" className="login-form" autocomplete="off">
             {/* <!-- Login form inputs --> */}
             <div className={"flex justify-center items-center" + (error && ' bg-[#fbe6e6] h-[50px] gap-1')}>
             { error && 
@@ -265,34 +266,34 @@ export default function Login() {
             </span>
             </div>
             
-          <div class="input-box">
+          <div className="input-box">
             
-              <input type="text" class="input-field" id="log-email" required  value={email} onChange={e => setEmail(e.target.value)}/>
-              <label for="log-email" class="label">Email</label>
-              {/* <i class='bx bx-envelope icon'></i> */}
+              <input type="text" className="input-field" id="log-email" required  value={email} onChange={e => setEmail(e.target.value)}/>
+              <label for="log-email" className="label">Email</label>
+              {/* <i className='bx bx-envelope icon'></i> */}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 icon">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
               </svg>
 
 
           </div>
-          <div class="input-box">
-              <input type="password" class="input-field" id="log-pass" required value={password} onChange={e => setPassword(e.target.value)}/>
-              <label for="log-pass" class="label">Password</label>
-              <i class='bx bx-lock-alt icon'></i>
+          <div className="input-box">
+              <input type="password" className="input-field" id="log-pass" required value={password} onChange={e => setPassword(e.target.value)}/>
+              <label for="log-pass" className="label">Password</label>
+              <i className='bx bx-lock-alt icon'></i>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 icon">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
               </svg>
 
           </div>
-          <div class="form-cols">
-              <div class="col-1"></div>
-              <div class="col-2">
+          <div className="form-cols">
+              <div className="col-1"></div>
+              <div className="col-2">
                   <a href="#">Forgot password?</a>
               </div>
           </div>
-          <div class="input-box">
-              <button class="btn-submit" id="SignInBtn">Sign In <i class='bx bx-log-in'></i></button>
+          <div className="input-box">
+              <button className="btn-submit" id="SignInBtn">Sign In <i className='bx bx-log-in'></i></button>
           </div>          
         </form>
     </div>
