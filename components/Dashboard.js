@@ -10,7 +10,10 @@ import { ClipboardDocumentListIcon } from '@heroicons/react/24/solid'
 import { ChartBarIcon } from '@heroicons/react/24/solid'
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid'
 import { ClockIcon } from '@heroicons/react/24/outline'
-import { CalendarIcon } from '@heroicons/react/24/outline'
+import { CalendarIcon } from '@heroicons/react/24/outline';
+import {timeSince}  from "@/utils/dateUtils";
+import getShortTitleString from "@/utils/shortProductTitleString";
+import dateFormatter from "@/utils/dateFormatter";
 
 
 
@@ -260,7 +263,7 @@ const StyledSection = styled.div`
     display: flex;
     flex-direction:column;
     justify-content: center;
-    align-items:center;
+    align-items:flex-start;
     
 }
 
@@ -287,20 +290,24 @@ const StyledSection = styled.div`
     font-size: 10px;
     padding: 6px 16px;
     color: var(--light);
-    border-radius: 20px;
+    border-radius: 4px;
     font-weight: 700;
+    text-transform: Capitalize;
+    display: block;
+    text-align: center;
 }
 
 #content main .table-data .order table tr td .status.completed {
     background: var(--blue);
 }
 
-#content main .table-data .order table tr td .status.process {
+#content main .table-data .order table tr td .status.processing {
     background: var(--yellow);
 }
 
 #content main .table-data .order table tr td .status.pending {
     background: var(--orange);
+    
 }
 
 
@@ -445,15 +452,15 @@ export default function Dashboard() {
       }, []);
       console.log("products", product);
       useEffect(() => {
-        axios.get('/api/products?latest=true')
+        axios.get('/api/order?latest=true')
           .then(response => {
-            setProduct(response.data);
+            setOrders(response.data);
           })
           .catch(error => {
             console.error("Failed to fetch products", error);
           });
       }, []);
-      console.log("products", product);
+      console.log("orders", orders);
     return(
         <div>
             <PageGlobalStyle />
@@ -581,15 +588,19 @@ export default function Dashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>#Sony VH1000mx4</td>
-                                            <td>
-                                                {/* <img src={product[0].images[0]}/> */}
-                                                <p>{product[0].title}...</p>
-                                            </td>
-                                            <td>2h ago</td>
-                                            <td><span className="status completed">Completed</span></td>
-                                        </tr>
+                                        {orders.map((order) => (
+                                            
+                                                <tr>
+                                                <td className="font-semibold">#{order._id.substring(0, 8)}</td>
+                                                <td>
+                                                    {/* <img src={product[0].images[0]}/> */}
+                                                    <p>{getShortTitleString(order.productDetails)}</p>
+                                                </td>
+                                                <td>{timeSince(order.createdAt)}</td>
+                                                <td><span className={"status"+` ${order.status}`}>{order.status}</span></td>
+                                            </tr>
+                                            )
+                                        )}
                                         
                                     </tbody>
                                 </table>
@@ -634,7 +645,7 @@ export default function Dashboard() {
                                                     
                                                 </td>
                                                 <td>XAF{product.price}</td>
-                                                <td>{new Date(product.updatedAt).toLocaleDateString('en-CA')}</td>
+                                                <td>{dateFormatter(product.updatedAt)}</td>
                                             </tr>
                                             );
                                             })

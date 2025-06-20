@@ -2,8 +2,9 @@ import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Logo from "@/components/Logo"
+import styled from "styled-components"
 
-export default function Nav({show}){
+export default function Nav({show, setShowNav}){
     const inactiveLink = 'flex gap-1 p-1'
     const activeLink = inactiveLink+' bg-highlight text-black rounded-sm'
     const inactiveIcon = 'w-6 h-6';
@@ -12,13 +13,19 @@ export default function Nav({show}){
     const {pathname} = router
     async function Logout() {
         await router.push('/');
-        await signOut();
+        await router.push('/login');
+        // await signOut();
     }
+
     return (
 
-    <aside className={(show?'left-0':'-left-full')+" top-0 text-gray-500 p-4 fixed w-full bg-bgGray  h-[full] md:static md:w-auto transition-all"}>
-        <div className="mb-4 mr-4">
+    <aside className={(show ? 'left-0':'-left-full')+" top-0 text-gray-500 p-4 fixed w-full bg-bgGray h-full md:static md:w-auto md:min-h-screen transition-all"}>
+        <div className="mb-4 mr-4 flex justify-between">
             <Logo />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={inactiveIcon + ' cursor-pointer md:hidden'} onClick={() => {setShowNav(false)}}>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+
         </div>
         
         <nav className="flex-col gap-x-2">
