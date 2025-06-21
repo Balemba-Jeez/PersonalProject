@@ -83,7 +83,7 @@ export default function Orders() {
               <td>Date</td>
               <td>Duration</td>
               <td>Status</td>
-              <td>Amount</td>
+              <td>Amount(XAF)</td>
               <td>Quantity</td>
             </tr>
           </thead>

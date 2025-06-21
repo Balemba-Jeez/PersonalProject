@@ -16,6 +16,7 @@
     "autoprefixer": "^10.4.21",
     "axios": "^1.8.4",
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
     "eslint": "9.24.0",
     "eslint-config-next": "15.2.4",
     "mime-types": "^3.0.1",

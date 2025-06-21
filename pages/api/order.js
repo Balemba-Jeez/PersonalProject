@@ -1,10 +1,21 @@
 import { Order } from '@/models/Order';
 import { mongooseConnect } from '@/lib/mongoose';
 import mongoose from "mongoose";
+import Cors from 'cors';
+import initMiddleware from '@/lib/init-middleware'; // helper to use middleware in Next.js API routes
+
+const cors = initMiddleware(
+  Cors({
+    origin: '*', // or use your actual domain(s)
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  })
+);
+
 
 export default async function handle(req, res) {
+    await cors(req, res);
     const {method} = req;
-    const { latest, today } = req.query;
+    const { latest, today, week, month } = req.query;
 
 
     await mongooseConnect(); //connect to MongoDB
@@ -30,7 +41,7 @@ export default async function handle(req, res) {
         // Get latest 5 orders with all their product details
         else if (latest === 'true') {
           const latestOrders = await Order.aggregate([
-            { $sort: { createdAt: -1 } },
+            { $sort: { createdAt: -1 } }, //descending order (latest dates first)
             { $limit: 5 },
             {
               $lookup: {
@@ -41,6 +52,7 @@ export default async function handle(req, res) {
               }
             }
           ]);
+          console.log('latestOrders', latestOrders);
           return res.status(200).json(latestOrders);
         }
         else if (today === 'true') {
@@ -63,7 +75,59 @@ export default async function handle(req, res) {
           return res.status(200).json({ count: todayOrders.length });
           
         }
-      
+        else if (week === 'true') {
+          const now = new Date();
+        
+          // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+          const day = now.getDay();
+          const diffToMonday = day === 0 ? -6 : 1 - day; // Adjust if it's Sunday
+        
+          // Start of the week (Monday)
+          const startOfWeek = new Date(now);
+          startOfWeek.setDate(now.getDate() + diffToMonday);
+          startOfWeek.setHours(0, 0, 0, 0);
+        
+          // End of the week (Sunday)
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(startOfWeek.getDate() + 6);
+          endOfWeek.setHours(23, 59, 59, 999);
+        
+          const weekOrders = await Order.aggregate([
+            {
+              $match: {
+                createdAt: {
+                  $gte: startOfWeek,
+                  $lte: endOfWeek,
+                },
+              },
+            },
+          ]);
+        
+          return res.status(200).json({ count: weekOrders.length });
+        }
+        else if (month === 'true') {
+          const now = new Date();
+        
+          // Start of the month
+          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+          // End of the month
+          const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+        
+          const monthOrders = await Order.aggregate([
+            {
+              $match: {
+                createdAt: {
+                  $gte: startOfMonth,
+                  $lte: endOfMonth
+                }
+              }
+            }
+          ]);
+        
+          return res.status(200).json({ count: monthOrders.length });
+        }
+        
+   
         // Get all orders with their product details
         else {
           const allOrders = await Order.aggregate([
@@ -76,6 +140,7 @@ export default async function handle(req, res) {
               }
             }
           ]);
+          console.log('All orders:', allOrders);
           return res.json(allOrders);
         }
       }
@@ -84,13 +149,15 @@ export default async function handle(req, res) {
 
       if (method === 'POST') {
         try{
+          console.log('Received body:', req.body);
         const { amount, total, status, shipping, products } = req.body;
       
         const orderDoc = await Order.create({
           amount, total, status, shipping, products
         });
       
-        return res.status(201).json(orderDoc);} catch (err) {
+        return res.status(201).json(orderDoc);
+      } catch (err) {
           
           console.error('Error creating order:', err);
           return res.status(500).json({ error: 'Failed to create order' });
