@@ -3,15 +3,20 @@ import Header from "@/components/Header";
 import NewProducts from "@/components/NewProduct";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/products";
+import styled from "styled-components";
+
+export const StyledDiv = styled.div`
+  margin-bottom: 20px;
+`;
 
 export default function HomePage({featuredProduct, newProducts}){
   console.log(newProducts);
   return(
-    <div>
+    <StyledDiv>
       <Header/>
       <Featured product={featuredProduct}/>
       <NewProducts products={newProducts}/>
-    </div>
+    </StyledDiv>
   )
 }
 

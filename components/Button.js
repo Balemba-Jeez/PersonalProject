@@ -35,6 +35,9 @@ export const ButtonStyle = css`
     ${props => props.black && !props.outline && css`
         background-color: #000;
         color: #fff;
+          &:hover {
+    background-color: #333; /* or any color you want */
+  }
     `} 
     ${props => props.black && props.outline && css`
         background-color: transparent;

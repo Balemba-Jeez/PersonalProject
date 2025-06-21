@@ -2,21 +2,21 @@ import Button from "@/components/Button";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
-import Input from "@/components/Input";
 import Table from "@/components/Table";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { formatPrice } from "@/utils/priceUtils";
-import { useRouter } from 'next/router';
 import OrderInfo from "@/components/orderInfo";
 import css from "styled-jsx/css";
+import Contact from "@/components/contact";
+import PaymentForm from "@/components/paymentForm";
 
 const ColumnsWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr;
     @media screen and (min-width: 768px) {
-        grid-template-columns: 1.2fr .8fr;
+        grid-template-columns: 1.2fr .8fr
     }
     gap: 40px;
     margin: 40px 0 35px;
@@ -28,11 +28,18 @@ const Box = styled.div`
     padding: 30px;
     ${props => props.summary && css`
         @media screen and (min-width: 768px) {
-            align-self: start;
-            position: sticky;
-            top: 1rem;
-            
-}`}
+        align-self: start;
+        position: sticky;
+        top: 15px;
+        
+        }
+    `}
+        ${props => props.deliverypayment && css`
+        @media screen and (min-width: 768px) {
+
+        
+        }
+    `}
 `;
 
 const ProductInfoCell = styled.td`
@@ -84,18 +91,17 @@ const CityHolder = styled.div`
 
 `;
 
+const InformationWrapper = styled.div`
+    @media screen and (min-width: 768px) {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+`;
 
-
-export default function CartPage() {
+export default function Payment() {
     const {cartProducts, addProduct, removeProduct} = useContext(CartContext);
     const [products, setProducts] = useState([]);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [city, setCity] = useState("");
-    const [contact, setContact] = useState(0);
-    const [streetAddress, setStreetAddress] = useState("");
-    const [country, setCountry] = useState("");
-    const router = useRouter();
     useEffect(() => {
         console.log("cartProducts:", cartProducts);
 
@@ -116,19 +122,53 @@ export default function CartPage() {
     function lessOfThisProduct(id){
         removeProduct(id);
     }
+    
+
 
     let total = 0;
     for (const productId of cartProducts){
         const price = products.find(p => p._id === productId)?.price || 0;
         total += price;
     }
+
+    const productOrderDetails =
+    products.map((product) => {
+        return (
+            {
+                productId: product._id,
+                quantity: cartProducts.filter(id => id === product._id).length,
+                amount: cartProducts.filter(id => id === product._id).length * product.price,
+            }
+        )
+    })
+
+
+    function makeOrder(cart_Products, amount){
+        const order = {
+            amount: amount,
+            total: cart_Products.length,
+            shipping: {
+                ...JSON.parse(localStorage.getItem('shipping'))
+            },
+            products: productOrderDetails,
+            
+        }
+        console.log('Final order', order);
+        axios.post('http://localhost:3001/api/order', order).then(response =>{
+            console.log('api response',response.data);
+        })
+        .catch(error => {
+            console.error('API error:', error);
+          });
+    }
     return (
         <>
           <Header />
           <Center>
             <ColumnsWrapper>
-                    <Box>
-                        <h2>Cart</h2>
+              <InformationWrapper>
+                <Box>
+                        <h2>Review order</h2>
                         {!cartProducts?.length && (
                             <div>Your cart is empty</div>
                         )}
@@ -177,23 +217,31 @@ export default function CartPage() {
                             </Table>
                     )}
                     </Box>
+                    <Box delivery>
+                        <Contact />
+                        
+                    </Box>
+                    <Box>
+                        <PaymentForm payment/>
+                    </Box>
+                </InformationWrapper>
+
                     {!!cartProducts?.length && (
                                         <Box summary>
                                             <h2>Summary</h2>
-                                                <OrderInfo items={cartProducts.length} total={total} transport={500} displayOrderTotal={false}/>
-                                                <input 
+                                            
+                                            <OrderInfo items={cartProducts.length} total={total} transport={500} displayOrderTotal={true}/>
+                                            
+                                            <input 
                                                     type="hidden" 
                                                     name="products" 
                                                     value={cartProducts.join(',')} />
-                                                <Button 
-                                                    black 
-                                                    block 
-                                                    type="button"
-                                                    onClick={() => router.push('/payment')}
-                                                >
-                                                    Continue to payment
-                                                
-                                                </Button>
+                                            <Button black block type="button"
+                                            onClick={() => {
+                                                console.log('clicked');
+                                                makeOrder(cartProducts,total)}}
+                                            >Confirm and pay
+                                            </Button>
                                             
                                         </Box>
                     )}

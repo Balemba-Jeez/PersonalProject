@@ -6,19 +6,20 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
 import mongoose from "mongoose";
 import styled from "styled-components";
+import { StyledDiv } from ".";
 
 
 
 export default function ProductsPage({products}){
     console.log(products);
     return(
-       <>
+       <StyledDiv>
           <Header />
           <Center>
           <Title>All products</Title>
           <ProductsGrid products={products}/>
           </Center>
-       </>
+       </StyledDiv>
     )
 }
 
