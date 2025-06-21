@@ -30,7 +30,7 @@ const Box = styled.div`
         @media screen and (min-width: 768px) {
             align-self: start;
             position: sticky;
-            top: 1rem;
+            top: 5rem;
             
 }`}
 `;

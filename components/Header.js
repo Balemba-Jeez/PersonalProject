@@ -8,6 +8,8 @@ import BarsIcon from "./icons/Bars";
 
 const StyledHeader = styled.header`
     background-color: #222;
+    position: sticky;
+    top: 0;
     
 `;
 

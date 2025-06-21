@@ -30,7 +30,7 @@ const Box = styled.div`
         @media screen and (min-width: 768px) {
         align-self: start;
         position: sticky;
-        top: 15px;
+        top: 5rem;
         
         }
     `}
@@ -151,10 +151,14 @@ export default function Payment() {
                 ...JSON.parse(localStorage.getItem('shipping'))
             },
             products: productOrderDetails,
-            
+            status: 'pending',
         }
         console.log('Final order', order);
-        axios.post('http://localhost:3001/api/order', order).then(response =>{
+        axios.post('http://localhost:3000/api/order', order, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(response =>{
             console.log('api response',response.data);
         })
         .catch(error => {

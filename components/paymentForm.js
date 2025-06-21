@@ -74,12 +74,7 @@ const Paymentform = styled.div`
 
 export default function PaymentForm() {
     
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [city, setCity] = useState("");
-    const [contact, setContact] = useState();
-    const [streetAddress, setStreetAddress] = useState("");
-    const [country, setCountry] = useState("");
+
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
         // Handle the payment method selection
