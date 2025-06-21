@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export default async function handle(req, res) {
     const {method} = req;
-    const { latest } = req.query;
+    const { latest, today } = req.query;
 
 
     await mongooseConnect(); //connect to MongoDB
@@ -43,6 +43,26 @@ export default async function handle(req, res) {
           ]);
           return res.status(200).json(latestOrders);
         }
+        else if (today === 'true') {
+                const startOfToday = new Date();
+          startOfToday.setHours(0, 0, 0, 0);
+          const endOfToday = new Date();
+          endOfToday.setHours(23, 59, 59, 999);
+
+          const todayOrders = await Order.aggregate([
+            {
+              $match: {
+                createdAt: {
+                  $gte: startOfToday,
+                  $lte: endOfToday
+                }
+              }
+            }
+          ]);
+          // Send count
+          return res.status(200).json({ count: todayOrders.length });
+          
+        }
       
         // Get all orders with their product details
         else {
@@ -63,13 +83,18 @@ export default async function handle(req, res) {
     
 
       if (method === 'POST') {
-        const { amount, date, total, status, shipping, products } = req.body;
+        try{
+        const { amount, total, status, shipping, products } = req.body;
       
         const orderDoc = await Order.create({
-          amount, date, total, status, shipping, products
+          amount, total, status, shipping, products
         });
       
-        res.json(orderDoc);
+        return res.status(201).json(orderDoc);} catch (err) {
+          
+          console.error('Error creating order:', err);
+          return res.status(500).json({ error: 'Failed to create order' });
+        }
       }
       
       if (method === 'PUT') {
@@ -91,7 +116,7 @@ export default async function handle(req, res) {
     if (method === 'DELETE'){
         if (req.query?.id) {
             await Order.deleteOne({_id:req.query?.id});
-            res.json(true);
+            return res.json(true);
         }
     }
 }

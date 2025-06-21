@@ -430,8 +430,12 @@ const StyledSection = styled.div`
 
 export default function Dashboard() {
     const [totalProduct, setTotalProduct] = useState(0);
+    const [totalOrder, setTotalOrder] = useState(0);
     const [product, setProduct] = useState([]);
     const [orders, setOrders] = useState([]);
+    const [productsPerDay, setProductsPerDay] = useState(0);
+
+    //get all products
     useEffect(() => {
         axios.get('/api/products')
           .then(response => {
@@ -441,6 +445,9 @@ export default function Dashboard() {
             console.error("Failed to fetch products", error);
           });
       }, []);
+
+
+      //get latest products
       useEffect(() => {
         axios.get('/api/products?latest=true')
           .then(response => {
@@ -451,6 +458,20 @@ export default function Dashboard() {
           });
       }, []);
       console.log("products", product);
+
+    //get all orders
+    useEffect(() => {
+        axios.get('/api/order')
+            .then(response => {
+            setTotalOrder(response.data.length);
+            console.log('orders', response.data)
+            })
+            .catch(error => {
+            console.error("Failed to fetch products", error);
+            });
+        }, []);
+
+      //get latest products
       useEffect(() => {
         axios.get('/api/order?latest=true')
           .then(response => {
@@ -460,7 +481,21 @@ export default function Dashboard() {
             console.error("Failed to fetch products", error);
           });
       }, []);
-      console.log("orders", orders);
+      console.log("latest orders", orders);
+
+      //get all orders per day
+      useEffect(() => {
+        axios.get('/api/order?today=true')
+          .then(response => {
+            console.log("Orders today count:", response.data.count);
+            setProductsPerDay(response.data.count);
+          })
+          .catch(error => {
+            console.error("Failed to fetch orders today", error);
+          });
+      }, []);
+
+
     return(
         <div>
             <PageGlobalStyle />
@@ -516,7 +551,7 @@ export default function Dashboard() {
                                 </svg>
                                 <span className="text">
                                     <p>ORDER</p>
-                                    <h3>10</h3>
+                                    <h3>{totalOrder}</h3>
                                     
                                 </span>
                             </li>
@@ -543,7 +578,7 @@ export default function Dashboard() {
                                 </svg>
                                 <span className="text">
                                     <p>TODAY</p>
-                                    <h3>{totalProduct}</h3>
+                                    <h3>{productsPerDay}</h3>
                                     
                                 </span>
                             </li>
@@ -554,7 +589,7 @@ export default function Dashboard() {
                                 </svg>
                                 <span className="text">
                                     <p>THIS WEEK</p>
-                                    <h3>10</h3>
+                                    <h3>{10}</h3>
                                     
                                 </span>
                             </li>

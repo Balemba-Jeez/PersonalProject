@@ -4,13 +4,15 @@ import mongoose, { models, Schema } from "mongoose";
 // models/Order.js
 const OrderSchema = new Schema({
     amount: Number,
-    date: Date,
     total: Number,
     status: String,
     shipping: {
+      name: String,
+      email: String,
       address: String,
       city: String,
       number: Number,
+      cni: String,
     },
     products: [
       {
