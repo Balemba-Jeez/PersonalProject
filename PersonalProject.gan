@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="GASSPACE PROJECT PLANNING" company="" webLink="http://" view-date="2024-06-24" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3309" locale="en_GB">
+    <description/>
+    <view zooming-state="default:7" id="gantt-chart">
+        <field id="tpd3" name="Name" width="75" order="0"/>
+        <field id="tpd4" name="Begin date" width="137" order="1"/>
+        <field id="tpd5" name="End date" width="138" order="2"/>
+        <field id="tpd15" name="Notes" width="20" order="3"/>
+        <option id="taskLabelUp" value=""/>
+        <option id="taskLabelDown" value="taskDates"/>
+        <option id="taskLabelLeft" value="advancement"/>
+        <option id="taskLabelRight" value="name"/>
+        <option id="filter.completedTasks" value="false"/>
+        <option id="filter.dueTodayTasks" value="false"/>
+        <option id="filter.overdueTasks" value="false"/>
+        <option id="filter.inProgressTodayTasks" value="false"/>
+        <timeline><![CDATA[0,7,3,2,4,6,1]]></timeline>
+        <option id="color.recent"><![CDATA[#999900 #9999ff #00ff00 #990033 #009999 #0000cc #990099 #f4f4f4]]></option>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Name" width="210" order="0"/>
+        <field id="1" name="Default role" width="86" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" uid="a29f4ef009ca452a88543c428860fe86" name="Prepare and Existing System" color="#8cb6ce" meeting="false" start="2024-07-03" duration="12" complete="98" thirdDate="2024-07-03" thirdDate-constraint="1" expand="true">
+            <depend id="1" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="1" uid="ae2f28a8e13044cebc93aaef80e9acce" name="Production of Revised Specification Book" color="#990099" meeting="false" start="2024-07-19" duration="5" complete="98" thirdDate="2024-07-19" thirdDate-constraint="1" expand="true">
+            <depend id="2" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="2" uid="7ee437bfebf04aa489d44d46685893c2" name="Solution Analysis and Drafting of the Analysis Document" color="#0000cc" meeting="false" start="2024-07-26" duration="5" complete="98" webLink="sfsaf" expand="true">
+            <depend id="3" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="3" uid="113586344da24feea4858c5e3de2aafb" name="Conception" color="#009999" meeting="false" start="2024-08-02" duration="11" complete="96" expand="true">
+            <depend id="4" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="4" uid="aea451324478416190ef00f937cec2e7" name="Realization" color="#990033" meeting="false" start="2024-08-19" duration="11" complete="99" expand="true">
+            <depend id="5" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="5" uid="589df2b96d99444dba864f922a4f0c45" name="Functionality Test" color="#00ff00" meeting="false" start="2024-09-03" duration="12" complete="60" expand="true">
+            <depend id="6" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="6" uid="abca537ab62e4086bc29e03f690b3537" name="Writing User Guide" color="#9999ff" meeting="false" start="2024-09-19" duration="4" complete="25" expand="true">
+            <depend id="7" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="7" uid="50f7e1e7222c4c9197f9cae01e6ec040" name="Writing User Guide" color="#999900" meeting="false" start="2024-09-25" duration="3" complete="99" expand="true"/>
+    </tasks>
+    <resources>
+        <resource id="0" name="saasfa" function="Default:0" contacts="" phone="sas"/>
+    </resources>
+    <allocations/>
+    <vacations/>
+    <previous>
+        <previous-tasks name="Insertion Phase">
+            <previous-task id="0" start="2024-07-03" duration="12" meeting="false" super="false"/>
+            <previous-task id="1" start="2024-07-19" duration="5" meeting="false" super="false"/>
+            <previous-task id="2" start="2024-07-26" duration="5" meeting="false" super="false"/>
+            <previous-task id="3" start="2024-08-02" duration="11" meeting="false" super="false"/>
+            <previous-task id="4" start="2024-08-19" duration="11" meeting="false" super="false"/>
+            <previous-task id="5" start="2024-09-03" duration="12" meeting="false" super="false"/>
+            <previous-task id="6" start="2024-09-19" duration="4" meeting="false" super="false"/>
+            <previous-task id="7" start="2024-09-25" duration="3" meeting="false" super="false"/>
+        </previous-tasks>
+    </previous>
+    <roles roleset-name="Default"/>
+</project>
