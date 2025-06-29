@@ -196,7 +196,7 @@ async function processPaymentAndOrder(cart_Products, amount, phoneNumber, method
       method,
       total: cart_Products.length,
     });
-
+    localStorage.setItem("transactionDetails", JSON.stringify(paymentRes.data));
     if (paymentRes.data.success) {
       const reference = paymentRes.data.campayResponse.reference;
 
@@ -215,6 +215,7 @@ async function processPaymentAndOrder(cart_Products, amount, phoneNumber, method
             // 3. Create Order ONLY if payment is successful
             makeOrder(cart_Products, amount, reference);
           } else {
+            handlePaymentSuccess()
             console.log('Payment not successful yet. Status: ' + status);
           }
         } catch (err) {
@@ -316,6 +317,9 @@ async function processPaymentAndOrder(cart_Products, amount, phoneNumber, method
                     )}
 
             </ColumnsWrapper>
+            {showSuccessModal && (
+        <SuccessPaymentModal onClose={() => setShowSuccessModal(false)} />
+      )}
           </Center>
 
         </>

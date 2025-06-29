@@ -1,19 +1,18 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const SuccessPaymentModal = ({ onClose }) => {
   const router = useRouter();
 
-  useEffect(() => {
-    // Close modal after 5 seconds
-    const timer = setTimeout(() => {
-      onClose();
-      // Optionally redirect to another page
-      // router.push('/dashboard');
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
+  const handleViewOrders = () => {
+    router.push('/orders');
+    onClose();
+  };
+
+  const handleReturnHome = () => {
+    router.push('/');
+    onClose();
+  };
 
   return (
     <ModalOverlay>
@@ -31,19 +30,26 @@ const SuccessPaymentModal = ({ onClose }) => {
         <DetailsContainer>
           <DetailItem>
             <DetailLabel>Amount Paid:</DetailLabel>
-            <DetailValue>$99.00</DetailValue>
+            <DetailValue>XAF{transactionDetails?.amount || '99.00'}</DetailValue>
           </DetailItem>
           <DetailItem>
             <DetailLabel>Transaction ID:</DetailLabel>
-            <DetailValue>PAY-789456123</DetailValue>
+            <DetailValue>{transactionDetails?.id || 'PAY-789456123'}</DetailValue>
           </DetailItem>
           <DetailItem>
             <DetailLabel>Date:</DetailLabel>
-            <DetailValue>{new Date().toLocaleDateString()}</DetailValue>
+            <DetailValue>{transactionDetails?.date || new Date().toLocaleDateString()}</DetailValue>
           </DetailItem>
         </DetailsContainer>
         
-        <Button onClick={onClose}>Continue</Button>
+        <ButtonGroup>
+          <PrimaryButton onClick={handleViewOrders}>
+            View My Orders
+          </PrimaryButton>
+          <SecondaryButton onClick={handleReturnHome}>
+            Return to Home
+          </SecondaryButton>
+        </ButtonGroup>
       </ModalContainer>
     </ModalOverlay>
   );
@@ -160,9 +166,13 @@ const DetailValue = styled.span`
   color: #000;
 `;
 
-const Button = styled.button`
-  background-color: #000;
-  color: white;
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+`;
+
+const BaseButton = styled.button`
   border: none;
   padding: 0.8rem 2rem;
   font-size: 1rem;
@@ -173,13 +183,31 @@ const Button = styled.button`
   width: 100%;
 
   &:hover {
-    background-color: #333;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   &:active {
     transform: translateY(0);
+  }
+`;
+
+const PrimaryButton = styled(BaseButton)`
+  background-color: #000;
+  color: white;
+
+  &:hover {
+    background-color: #333;
+  }
+`;
+
+const SecondaryButton = styled(BaseButton)`
+  background-color: white;
+  color: #000;
+  border: 1px solid #ddd;
+
+  &:hover {
+    background-color: #f8f8f8;
   }
 `;
 
