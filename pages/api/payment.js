@@ -18,7 +18,7 @@ export default async function handle(req, res) {
     return res.status(405).json({ error: 'Only POST allowed' });
   }
 
-  const { amount, phoneNumber, description = 'Order Payment', method = 'mobile_money', orderId = null, total } = req.body;
+  const { amount, phoneNumber, description = 'Order Payment', method, orderId = null, total } = req.body;
 
   if (!amount || !phoneNumber) {
     return res.status(400).json({ error: 'Amount and phone number are required' });
@@ -50,6 +50,7 @@ export default async function handle(req, res) {
         status: result.status || 'pending', // or 'success' if Campay confirms
         orderId: orderId || null,
         method,
+        reference: result.reference,
       });
 
       return res.status(200).json({
