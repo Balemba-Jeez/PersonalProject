@@ -147,54 +147,22 @@ export default async function handle(req, res) {
       
     
 
-if (method === 'POST') {
-  try {
-    const { amount, total, status, shipping, products, phone } = req.body;
-
-    // 🪙 Call Campay to collect payment
-    const campayRes = await fetch('https://demo.campay.net/api/collect/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${process.env.CAMPAY_API_TOKEN}`, // store your token in .env
-      },
-      body: JSON.stringify({
-        amount,
-        from: '+237' + phone, // Phone number from client
-        description: 'Order payment',
-        external_reference: '',
-        currency: 'XAF',
-      }),
-    });
-
-    const result = await campayRes.json();
-
-    if (!campayRes.ok) {
-      console.error('Campay Error:', result);
-      return res.status(400).json({ error: 'Payment failed', details: result });
-    }
-
-    // 💾 Save order if payment is successful
-    const orderDoc = await Order.create({
-      amount,
-      total,
-      status: 'paid',
-      shipping,
-      products,
-    });
-
-    return res.status(201).json({
-      message: 'Order placed and payment successful',
-      order: orderDoc,
-      payment: result,
-    });
-
-  } catch (err) {
-    console.error('Error placing order:', err);
-    return res.status(500).json({ error: 'Failed to place order' });
-  }
-}
-
+      if (method === 'POST') {
+        try{
+          console.log('Received body:', req.body);
+        const { amount, total, status, shipping, products } = req.body;
+      
+        const orderDoc = await Order.create({
+          amount, total, status, shipping, products
+        });
+      
+        return res.status(201).json(orderDoc);
+      } catch (err) {
+          
+          console.error('Error creating order:', err);
+          return res.status(500).json({ error: 'Failed to create order' });
+        }
+      }
       
       if (method === 'PUT') {
         const { _id, status } = req.body;
