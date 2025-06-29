@@ -1,5 +1,5 @@
 import Input from "@/components/Input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import css from "styled-jsx/css";
 
@@ -83,9 +83,7 @@ export default function PaymentForm() {
                 phone
             }
             console.log('clientPhone',phone);
-            localStorage.setItem('clientPhone',
-                JSON.stringify(phone)
-            );
+            localStorage.setItem('clientPhone', JSON.stringify({ clientPhone: phone }));
         },[phone]);
 
         // Handle the payment method selection

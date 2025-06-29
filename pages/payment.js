@@ -143,28 +143,84 @@ export default function Payment() {
     })
 
 
-    function makeOrder(cart_Products, amount){
-        const order = {
-            amount: amount,
-            total: cart_Products.length,
-            shipping: {
-                ...JSON.parse(localStorage.getItem('shipping'))
-            },
-            products: productOrderDetails,
-            status: 'pending',
-        }
-        console.log('Final order', order);
-        axios.post('http://localhost:3000/api/order', order, {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }).then(response =>{
-            console.log('api response',response.data);
-        })
-        .catch(error => {
-            console.error('API error:', error);
-          });
+function makeOrder(cart_Products, amount, reference) {
+  const order = {
+    amount: amount,
+    total: cart_Products.length,
+    shipping: {
+      ...JSON.parse(localStorage.getItem('shipping'))
+    },
+    products: productOrderDetails,
+    status: 'pending',
+  };
+
+  console.log('📝 Final order to be saved:', order);
+
+  axios.post('http://localhost:3000/api/order', order, {
+    headers: {
+      'Content-Type': 'application/json'
     }
+  })
+  .then(async response => {
+    const orderId = response.data._id;
+
+    // Optional: Link the Payment with the new order
+    await axios.put('http://localhost:3000/api/payment/update', {
+      reference,
+      orderId
+    });
+
+    console.log('✅ Order saved, linked to payment.');
+  })
+  .catch(error => {
+    console.error('❌ Order creation failed:', error);
+  });
+}
+
+
+
+async function processPaymentAndOrder(cart_Products, amount, phoneNumber, method = 'mobile_money') {
+  try {
+    // 1. Start Payment
+    const paymentRes = await axios.post('http://localhost:3000/api/payment', {
+      amount,
+      phoneNumber,
+      method,
+      total: cart_Products.length,
+    });
+
+    if (paymentRes.data.success) {
+      const reference = paymentRes.data.campayResponse.reference;
+
+      console.log('🔄 Payment initiated, verifying status...');
+
+      // 2. Check status (wait 3s and verify)
+      setTimeout(async () => {
+        try {
+          const verifyRes = await axios.get(`http://localhost:3000/api/payment/status?reference=${reference}`);
+
+          const status = verifyRes.data.status;
+          console.log('✅ Payment status:', status);
+
+          if (status === 'SUCCESSFUL') {
+            // 3. Create Order ONLY if payment is successful
+            makeOrder(cart_Products, amount, reference);
+          } else {
+            console.log('Payment not successful yet. Status: ' + status);
+          }
+        } catch (err) {
+          console.error('Error verifying payment status:', err);
+        }
+      }, 3000); // wait for a few seconds before verifying
+    } else {
+      console.log('Payment failed to start');
+    }
+  } catch (err) {
+    console.error('Payment error:', err);
+  }
+}
+
+
     return (
         <>
           <Header />
@@ -242,8 +298,8 @@ export default function Payment() {
                                                     value={cartProducts.join(',')} />
                                             <Button black block type="button"
                                             onClick={() => {
-                                                console.log('clicked');
-                                                makeOrder(cartProducts,total)}}
+                                                processPaymentAndOrder(cartProducts, total, JSON.parse(localStorage.getItem('clientPhone')).clientPhone) // include phoneNumber
+                                                }}
                                             >Confirm and pay
                                             </Button>
                                             
