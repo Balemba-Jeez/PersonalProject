@@ -14,7 +14,11 @@ import { CalendarIcon } from '@heroicons/react/24/outline';
 import {timeSince}  from "@/utils/dateUtils";
 import getShortTitleString from "@/utils/shortProductTitleString";
 import dateFormatter from "@/utils/dateFormatter";
-
+import { DashboardGrid } from "@/utils/graphContainerStyle";
+import { SalesChart } from "./salesOverview";
+import { RevenueChart } from "./revenueBreakdown";
+import { OrdersChart } from "./orderStatus";
+import { VisitorsChart } from "./visitorAnalytics";
 
 
 const PageGlobalStyle = createGlobalStyle`
@@ -559,6 +563,12 @@ export default function Dashboard() {
                                 <h1>Dashboard</h1>
                             </div>
                         </div> */}
+                        <DashboardGrid>
+                            <SalesChart/>
+                            <RevenueChart />
+                            <OrdersChart />
+                            
+                        </DashboardGrid>
                         <h1 className="block text-3xl font-medium mb-0 mt-6">Total</h1>
                         <ul className="box-info ">
                             
