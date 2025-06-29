@@ -76,6 +76,17 @@ export default function PaymentForm() {
     
 
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+    const [phone, setPhone] = useState();
+
+        useEffect(()=>{
+          const clientPhone = {
+                phone
+            }
+            console.log('clientPhone',phone);
+            localStorage.setItem('clientPhone',
+                JSON.stringify(phone)
+            );
+        },[phone]);
 
         // Handle the payment method selection
     function handlePaymentSelection (method) {
@@ -130,7 +141,9 @@ export default function PaymentForm() {
                                     <div className="cardholder-name">
                                         {/* <label htmlFor="cardholder-name" className="label-default">Account number</label> */}
 
-                                        <Input type="text" id='cardholder-name' name='cardholder-name' className="input-default" placeHolder="Account number(momo, orangemoney)"/>
+                                        <Input type="text" id='cardholder-name' name='cardholder-name' className="input-default" placeHolder="Account number(momo, orangemoney)"
+                                            value={phone} 
+                                            onChange={ev => setPhone(ev.target.value)}/>
                                     </div>
 
 
