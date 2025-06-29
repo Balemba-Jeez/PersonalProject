@@ -11,7 +11,7 @@ export default function Logo(){
         
                     <span className="">
                 
-                        EcommerceAdmin 
+                        LocaVendAdmin 
                     </span>
                 </Link>
     )
