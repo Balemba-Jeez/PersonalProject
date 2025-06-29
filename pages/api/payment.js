@@ -1,31 +1,24 @@
-import { Order } from '@/models/Order';
 import { mongooseConnect } from '@/lib/mongoose';
-import mongoose from "mongoose";
+import { Payment } from '@/models/Payment';
 import Cors from 'cors';
-import initMiddleware from '@/lib/init-middleware'; // helper to use middleware in Next.js API routes
+import initMiddleware from '@/lib/init-middleware';
 
 const cors = initMiddleware(
   Cors({
-    origin: '*', // or use your actual domain(s)
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   })
 );
 
-
 export default async function handle(req, res) {
-    await cors(req, res);
-    const {method} = req;
-    
+  await cors(req, res);
+  await mongooseConnect();
 
-
-    await mongooseConnect(); //connect to MongoDB
-
-// pages/api/payment.js
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Only POST allowed' });
   }
 
-  const { amount, phoneNumber, description = 'Order Payment' } = req.body;
+  const { amount, phoneNumber, description = 'Order Payment', method = 'mobile_money', orderId = null, total } = req.body;
 
   if (!amount || !phoneNumber) {
     return res.status(400).json({ error: 'Amount and phone number are required' });
@@ -36,13 +29,13 @@ export default async function handle(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${process.env.CAMPAY_API_KEY}`, // store securely in .env
+        Authorization: `Token ${process.env.CAMPAY_API_KEY}`,
       },
       body: JSON.stringify({
-        amount,
+        amount: 50,
         from: '+237' + phoneNumber,
         description,
-        external_reference: '', // optional
+        external_reference: '',
         currency: 'XAF',
       }),
     });
@@ -50,10 +43,20 @@ export default async function handle(req, res) {
     const result = await response.json();
 
     if (response.ok) {
+      // ✅ Save the payment
+      const savedPayment = await Payment.create({
+        amount,
+        total: total, // optional – update if needed
+        status: result.status || 'pending', // or 'success' if Campay confirms
+        orderId: orderId || null,
+        method,
+      });
+
       return res.status(200).json({
         success: true,
         paymentId: result.id,
-        message: 'Payment initiated successfully',
+        message: 'Payment initiated and saved',
+        payment: savedPayment,
         campayResponse: result,
       });
     } else {
