@@ -3,7 +3,11 @@ import { useRouter } from 'next/router';
 
 const SuccessPaymentModal = ({ onClose }) => {
   const router = useRouter();
+  const rawData = localStorage.getItem('transactionDetails');
+  const transactionDetails = rawData ? JSON.parse(rawData) : null;
 
+  console.log(transactionDetails?.payment?.amount)
+  console.log(transactionDetails?.payment?._id)
   const handleViewOrders = () => {
     router.push('/orders');
     onClose();
@@ -30,11 +34,11 @@ const SuccessPaymentModal = ({ onClose }) => {
         <DetailsContainer>
           <DetailItem>
             <DetailLabel>Amount Paid:</DetailLabel>
-            <DetailValue>XAF{transactionDetails?.amount || '99.00'}</DetailValue>
+            <DetailValue>XAF{transactionDetails?.payment?.amount || '50.00'}</DetailValue>
           </DetailItem>
           <DetailItem>
             <DetailLabel>Transaction ID:</DetailLabel>
-            <DetailValue>{transactionDetails?.id || 'PAY-789456123'}</DetailValue>
+            <DetailValue>{transactionDetails?.payment?._id || 'PAY-789456123'}</DetailValue>
           </DetailItem>
           <DetailItem>
             <DetailLabel>Date:</DetailLabel>
