@@ -11,6 +11,8 @@ import OrderInfo from "@/components/orderInfo";
 import css from "styled-jsx/css";
 import Contact from "@/components/contact";
 import PaymentForm from "@/components/paymentForm";
+import SuccessPaymentModal from "@/components/successModal";
+
 
 const ColumnsWrapper = styled.div`
     display: grid;
@@ -102,6 +104,12 @@ const InformationWrapper = styled.div`
 export default function Payment() {
     const {cartProducts, addProduct, removeProduct} = useContext(CartContext);
     const [products, setProducts] = useState([]);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+    // Call this after successful payment
+    const handlePaymentSuccess = () => {
+        setShowSuccessModal(true);
+    };
     useEffect(() => {
         console.log("cartProducts:", cartProducts);
 
@@ -203,6 +211,7 @@ async function processPaymentAndOrder(cart_Products, amount, phoneNumber, method
           console.log('✅ Payment status:', status);
 
           if (status === 'SUCCESSFUL') {
+            handlePaymentSuccess()
             // 3. Create Order ONLY if payment is successful
             makeOrder(cart_Products, amount, reference);
           } else {
