@@ -147,22 +147,37 @@ export default async function handle(req, res) {
       
     
 
-      if (method === 'POST') {
-        try{
-          console.log('Received body:', req.body);
-        const { amount, total, status, shipping, products } = req.body;
-      
-        const orderDoc = await Order.create({
-          amount, total, status, shipping, products
-        });
-      
-        return res.status(201).json(orderDoc);
-      } catch (err) {
-          
-          console.error('Error creating order:', err);
-          return res.status(500).json({ error: 'Failed to create order' });
-        }
-      }
+if (method === 'POST') {
+  try {
+    console.log('Received body:', req.body);
+    const { amount, total, status, shipping, products } = req.body;
+
+    // Step 1: Create the order (without orderId in products yet)
+    const orderDoc = await Order.create({
+      amount,
+      total,
+      status,
+      shipping,
+      products: []  // We’ll add processed products next
+    });
+
+    // Step 2: Append orderId to each product
+    const updatedProducts = products.map(product => ({
+      ...product,
+      orderId: orderDoc._id, // Add orderId to each product
+    }));
+
+    // Step 3: Update the order with the new products containing orderId
+    orderDoc.products = updatedProducts;
+    await orderDoc.save();
+
+    return res.status(201).json(orderDoc);
+  } catch (err) {
+    console.error('Error creating order:', err);
+    return res.status(500).json({ error: 'Failed to create order' });
+  }
+}
+
       
       if (method === 'PUT') {
         const { _id, status } = req.body;

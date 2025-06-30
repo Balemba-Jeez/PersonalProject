@@ -1,7 +1,17 @@
 import { mongooseConnect } from '@/lib/mongoose';
 import { Payment } from '@/models/Payment';
+import Cors from 'cors';
+import initMiddleware from '@/lib/init-middleware';
+
+const cors = initMiddleware(
+  Cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  })
+);
 
 export default async function handler(req, res) {
+  await cors(req, res);
   await mongooseConnect();
 
   if (req.method !== 'PUT') {

@@ -18,6 +18,8 @@ export default async function handle(req, res) {
     return res.status(405).json({ error: 'Only POST allowed' });
   }
 
+  console.log('Incoming payment request:', req.body);
+  console.log('Campay API Key:', process.env.CAMPAY_API_KEY);
   const { amount, phoneNumber, description = 'Order Payment', method, orderId = null, total } = req.body;
 
   if (!amount || !phoneNumber) {
@@ -25,6 +27,12 @@ export default async function handle(req, res) {
   }
 
   try {
+    console.log('Sending to Campay:', {
+      amount,
+      from: '+237' + phoneNumber,
+      description,
+    });
+
     const response = await fetch('https://demo.campay.net/api/collect/', {
       method: 'POST',
       headers: {
@@ -41,6 +49,7 @@ export default async function handle(req, res) {
     });
 
     const result = await response.json();
+    console.log('Campay response:', result);
 
     if (response.ok) {
       // ✅ Save the payment
@@ -68,7 +77,8 @@ export default async function handle(req, res) {
       });
     }
   } catch (error) {
-    console.error('Campay error:', error);
+    console.error('Campay error:', error.message);
+    console.error(error.stack);
     return res.status(500).json({ error: 'Something went wrong' });
   }
 }
