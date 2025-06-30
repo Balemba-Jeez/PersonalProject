@@ -216,6 +216,8 @@ async function processPaymentAndOrder(cart_Products, amount, phoneNumber, method
             makeOrder(cart_Products, amount, reference);
           } else {
             handlePaymentSuccess()
+            // 3. Create Order ONLY if payment is successful
+            makeOrder(cart_Products, amount, reference);
             console.log('Payment not successful yet. Status: ' + status);
           }
         } catch (err) {

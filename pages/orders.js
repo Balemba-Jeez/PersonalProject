@@ -15,6 +15,7 @@ export default function OrdersPage() {
     try {
       const response = await fetch('http://localhost:3000/api/order?latest=true');
       const data = await response.json();
+      console.log(data)
       setOrders(data);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -43,25 +44,30 @@ export default function OrdersPage() {
                     <OrderDate>
                       {new Date(order.createdAt).toLocaleDateString()}
                     </OrderDate>
-                    <OrderTotal>Total: ${order.total}</OrderTotal>
+                    <OrderTotal>Total: XAF{order.amount}</OrderTotal>
                   </OrderHeader>
                   
                   <ProductsList>
-                    {order.products.map((product) => (
-                      <ProductItem key={product._id}>
-                        <ProductImage 
-                          src={product.productDetails?.images?.[0] || '/default-product.png'} 
-                          alt={product.productDetails?.name} 
-                        />
-                        <ProductInfo>
-                          <ProductName>{product.productDetails?.name}</ProductName>
-                          <ProductMeta>
-                            <span>Qty: {product.quantity}</span>
-                            <span>${product.amount || product.productDetails?.price}</span>
-                          </ProductMeta>
-                        </ProductInfo>
-                      </ProductItem>
-                    ))}
+                    {order.products.map((product) => {
+  const matchedProduct = order.productDetails?.find(p => p._id === product.productId);
+
+  return matchedProduct ? (
+    <ProductItem key={product._id}>
+      <ProductImage 
+        src={matchedProduct.images?.[0] || '/default-product.png'} 
+        alt={matchedProduct.title || 'Product'} 
+      />
+      <ProductInfo>
+        <ProductName>{matchedProduct.title}</ProductName>
+        <ProductMeta>
+          <span>Qty: {product.quantity}</span>
+          <span>XAF{product.amount || matchedProduct.price}</span>
+        </ProductMeta>
+      </ProductInfo>
+    </ProductItem>
+  ) : null;
+})}
+
                   </ProductsList>
                   
                   <OrderFooter>
